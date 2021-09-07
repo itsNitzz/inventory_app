@@ -1,0 +1,49 @@
+.container {
+  margin-top: 5rem;
+  height: auto;
+  max-width: 50rem;
+}
+
+table {
+  height: auto;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  text-align: center;
+}
+
+th,
+td {
+  padding: 15px;
+  font-size: 20px;
+}
+
+th {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: rgb(204, 197, 103);
+}
+
+td {
+  background-color: rgb(224, 222, 222);
+}
+
+.button {
+  cursor: pointer;
+}
+
+@media (max-width: 650px) {
+  table {
+    width: 90%;
+    margin: 0 auto;
+  }
+  th,
+  td {
+    padding: 10px;
+    font-size: 16px;
+  }
+}

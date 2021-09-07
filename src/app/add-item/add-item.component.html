@@ -1,0 +1,27 @@
+<div class="container">
+  <form (ngSubmit)="onSubmit(f.value)" #f="ngForm">
+    <div class="input-container">
+      <label for="name">Item Name</label>
+      <input ngModel type="text" name="name" id="name" required />
+    </div>
+    <div class="input-container">
+      <label for="quantity">Quantity</label>
+      <input ngModel type="number" name="quantity" id="quantity" required />
+    </div>
+    <div class="input-container">
+      <label for="price">Total Price</label>
+      <input ngModel type="number" name="price" id="price" required />
+    </div>
+    <div class="input-container">
+      <label for="description">Description</label>
+      <input ngModel type="text" name="description" id="Description" required />
+    </div>
+    <div class="btn-container">
+      <button [disabled]="!f.valid">Add Item</button>
+    </div>
+    <div class="message">
+      <h3 [hidden]="isHidden">Added to the Inventory!</h3>
+      <h3 *ngIf="!f.valid && f.touched">Please, fill all the fields!</h3>
+    </div>
+  </form>
+</div>
