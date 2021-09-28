@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -9,10 +9,16 @@ import { UpdateInventoryComponent } from './update-inventory/update-inventory.co
 import { AddItemComponent } from './add-item/add-item.component';
 import { HomeComponent } from './home/home.component';
 import { RouterModule, Routes } from '@angular/router';
+import { InventoryDataResolver } from './shared/inventoryData-resolver.resolver';
 
 const appRouting: Routes = [
-  { path: 'view', component: ViewInventoryComponent },
+  {
+    path: 'view',
+    component: ViewInventoryComponent,
+    resolve: { inventory: InventoryDataResolver },
+  },
   { path: 'add-item', component: AddItemComponent },
+  { path: 'add-item/edit/:id', component: UpdateInventoryComponent },
 ];
 @NgModule({
   declarations: [
@@ -25,8 +31,9 @@ const appRouting: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(appRouting),
     HttpClientModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(appRouting),
   ],
   providers: [],
   bootstrap: [AppComponent],

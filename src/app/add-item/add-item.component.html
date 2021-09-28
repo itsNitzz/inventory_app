@@ -17,11 +17,10 @@
       <input ngModel type="text" name="description" id="Description" required />
     </div>
     <div class="btn-container">
-      <button [disabled]="!f.valid">Add Item</button>
+      <button [disabled]="!f.valid" type="submit">Add Item</button>
     </div>
-    <div class="message">
-      <h3 [hidden]="isHidden">Added to the Inventory!</h3>
-      <h3 *ngIf="!f.valid && f.touched">Please, fill all the fields!</h3>
+    <div [hidden]="!isAdded" class="message">
+      <p>An Item is Added to the Inventory!</p>
     </div>
   </form>
 </div>

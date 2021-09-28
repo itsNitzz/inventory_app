@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 import { DataModel } from '../shared/data.model';
 import { InventoryDataService } from '../shared/inventory-data.service';
@@ -12,33 +11,44 @@ import { ItemDataService } from '../shared/item-data.service';
   styleUrls: ['./add-item.component.css'],
 })
 export class AddItemComponent implements OnInit, OnDestroy {
-  @ViewChild('f') formData: NgForm;
-  loadedData: DataModel[] = [];
-  isHidden = true;
-  getItemData: DataModel;
-  idSubs: Subscription;
-  dataSubs: Subscription;
+  isAdded = false;
+  @ViewChild('f', { static: true }) formValue: NgForm;
 
   constructor(
     private itemDataService: ItemDataService,
-    private inventoryData: InventoryDataService
+    private inventoryDataService: InventoryDataService
   ) {}
 
-  ngOnInit() {
-    // this.dataSubs = this.itemDataService.updatedPosts.subscribe((data) => {
-    //   this.loadedData = data;
-    // });
-  }
+  ngOnInit() {}
 
   onSubmit(formData: DataModel) {
-    this.inventoryData.onCreateAndStoreData(formData);
-    this.isHidden = false;
+    if (JSON.parse(localStorage.getItem('item'))) {
+      this.itemDataService.loadedPosts = JSON.parse(
+        localStorage.getItem('item')
+      );
+      this.itemDataService.addNewData(formData);
+      localStorage.setItem(
+        'item',
+        JSON.stringify(this.itemDataService.loadedPosts)
+      );
+    } else {
+      this.itemDataService.addNewData(formData);
+      localStorage.setItem(
+        'item',
+        JSON.stringify(this.itemDataService.loadedPosts)
+      );
+    }
+
+    this.isAdded = true;
     setTimeout(() => {
-      this.isHidden = true;
-    }, 2000);
+      this.isAdded = false;
+    }, 1000);
+
+    this.inventoryDataService.onCreateAndStoreData();
+    this.formValue.reset();
   }
 
   ngOnDestroy() {
-    this.dataSubs.unsubscribe();
+    // this.dataSubs.unsubscribe();
   }
 }

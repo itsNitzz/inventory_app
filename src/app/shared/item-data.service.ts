@@ -1,32 +1,46 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { DataModel } from './data.model';
-import { InventoryDataService } from './inventory-data.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ItemDataService implements OnDestroy {
   updatedPosts = new Subject<DataModel[]>();
+  loadedPosts: DataModel[] = [];
   dataSubs: Subscription;
-  posts: DataModel[] = [];
+  error = new Subject<any>();
 
-  constructor(private inventoryData: InventoryDataService) {}
+  constructor() {}
 
-  showingData() {
-    this.inventoryData.onFetchingPosts().subscribe((modifiedData) => {
-      this.onUpdatePosts(modifiedData);
-      this.updatedPosts.next(modifiedData);
-    });
+  setInventoryData(data) {
+    this.loadedPosts = data;
+    this.updatedPosts.next(this.loadedPosts.slice());
+  }
+  addNewData(data: DataModel) {
+    this.loadedPosts.push(data);
+    this.updatedPosts.next(this.loadedPosts.slice());
   }
 
-  onUpdatePosts(data) {
-    this.dataSubs = this.updatedPosts.subscribe((data) => {
-      this.posts = [...data];
-    });
+  getInventoryData() {
+    return this.loadedPosts.slice();
+  }
+
+  getItemById(id: number) {
+    return this.loadedPosts[id];
+  }
+
+  onUpdateInventoryData(index: number, data: DataModel) {
+    this.loadedPosts[index] = data;
+    this.updatedPosts.next(this.loadedPosts);
+  }
+
+  onDeleteItem(index: number) {
+    this.loadedPosts.splice(index, 1);
+    this.updatedPosts.next(this.loadedPosts);
   }
 
   ngOnDestroy() {
-    this.dataSubs.unsubscribe();
+    // this.dataSubs.unsubscribe();
   }
 }

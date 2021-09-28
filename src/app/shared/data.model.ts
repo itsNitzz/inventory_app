@@ -3,5 +3,5 @@ export interface DataModel {
   quantity: number;
   price: number;
   description: string;
-  id?: string;
+  id?: number;
 }

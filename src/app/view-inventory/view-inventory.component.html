@@ -10,14 +10,24 @@
         <th>Delete</th>
       </tr>
       <tr *ngFor="let data of loadedPosts; let i = index">
-        <td><span class="button" (click)="onEditItem(i)">Edit Item</span></td>
+        <td>
+          <span class="button" (click)="onEditItem(i)"
+            ><i class="far fa-edit"></i
+          ></span>
+        </td>
         <td>{{ data.name }}</td>
         <td>{{ data.quantity }}</td>
         <td>{{ data.price }}</td>
         <td>{{ data.description }}</td>
-        <td><span class="button" (click)="onDeleteItem(i)">X</span></td>
+        <td>
+          <span class="button" (click)="onDeleteItem(i)"
+            ><i class="far fa-trash-alt"></i
+          ></span>
+        </td>
       </tr>
     </table>
   </div>
-  <div *ngIf="isFetching"><h3>Loading.....</h3></div>
+  <div *ngIf="isFetching">
+    <h2>Loading...</h2>
+  </div>
 </div>

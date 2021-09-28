@@ -6,14 +6,13 @@
 
 table {
   height: auto;
-  width: 100%;
+  border: none;
   border-collapse: collapse;
 }
 
 table,
 th,
 td {
-  border: 1px solid black;
   text-align: center;
 }
 
@@ -34,6 +33,13 @@ td {
 
 .button {
   cursor: pointer;
+}
+
+.fa-edit {
+  color: rgb(248, 99, 248);
+}
+.fa-trash-alt {
+  color: rgb(245, 99, 99);
 }
 
 @media (max-width: 650px) {

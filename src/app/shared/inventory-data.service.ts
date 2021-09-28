@@ -1,20 +1,30 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Subject, Subscription, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { DataModel } from './data.model';
+import { ItemDataService } from './item-data.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class InventoryDataService {
-  constructor(private http: HttpClient) {}
-  uploadedData: DataModel;
+export class InventoryDataService implements OnDestroy {
+  dataSubs: Subscription;
+  constructor(
+    private http: HttpClient,
+    private itemDataService: ItemDataService
+  ) {}
 
-  onCreateAndStoreData(postData: DataModel) {
-    this.uploadedData = postData;
+  onCreateAndStoreData() {
+    let postData = JSON.parse(localStorage.getItem('item'));
+    this.dataSubs = this.itemDataService.updatedPosts.subscribe(
+      (updatedData) => {
+        postData = updatedData;
+      }
+    );
     this.http
-      .post<{ name: string }>(
+      .put(
         'https://inventory-app-e3fe6-default-rtdb.firebaseio.com/posts.json',
         postData
       )
@@ -24,21 +34,23 @@ export class InventoryDataService {
   // fecthing data from the backend(firebase)
   onFetchingPosts() {
     return this.http
-      .get<{ [s: string]: DataModel }>(
+      .get<DataModel[]>(
         'https://inventory-app-e3fe6-default-rtdb.firebaseio.com/posts.json'
       )
       .pipe(
         map((responseData) => {
           const modifiedData: DataModel[] = [];
-          for (let key in responseData) {
-            if (responseData.hasOwnProperty(key)) {
-              modifiedData.push({ ...responseData[key], id: key });
-            }
+          if (responseData) {
+            responseData.forEach((data) => {
+              modifiedData.push(data);
+            });
           }
           return modifiedData;
         })
       );
   }
 
-  onDelete() {}
+  ngOnDestroy() {
+    this.dataSubs.unsubscribe();
+  }
 }
